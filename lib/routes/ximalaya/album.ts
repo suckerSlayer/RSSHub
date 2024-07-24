@@ -164,21 +164,24 @@ async function handler(ctx) {
     }
 
     await Promise.all(
-        playList.map(async (item) => {
-            const link = baseUrl + albumUrl + item.trackId;
-            item.desc = await cache.tryGet('ximalaya:' + shouldShowNote.toString() + 'trackRichInfo' + link, async () => {
-                let _desc;
-                if (shouldShowNote) {
-                    const trackRichInfoApi = `https://mobile.ximalaya.com/mobile-track/richIntro?trackId=${item.trackId}`;
-                    const trackRichInfoResponse = await ofetch<RichIntro>(trackRichInfoApi);
-                    _desc = trackRichInfoResponse.richIntro;
-                }
-                if (!_desc) {
-                    _desc = `<a href="${link}">在网页中查看</a>`;
-                }
-                return _desc;
-            });
-        })
+        playList
+            // [ref: feat(route): Add request throttling for apnews ](https://github.com/DIYgod/RSSHub/commit/38e4f1ac506e8a7bae436d7ed71581c4a78389af)
+            .slice(0, 501)
+            .map(async (item) => {
+                const link = baseUrl + albumUrl + item.trackId;
+                item.desc = await cache.tryGet('ximalaya:' + shouldShowNote.toString() + 'trackRichInfo' + link, async () => {
+                    let _desc;
+                    if (shouldShowNote) {
+                        const trackRichInfoApi = `https://mobile.ximalaya.com/mobile-track/richIntro?trackId=${item.trackId}`;
+                        const trackRichInfoResponse = await ofetch<RichIntro>(trackRichInfoApi);
+                        _desc = trackRichInfoResponse.richIntro;
+                    }
+                    if (!_desc) {
+                        _desc = `<a href="${link}">在网页中查看</a>`;
+                    }
+                    return _desc;
+                });
+            })
     );
 
     const token = config.ximalaya.token;

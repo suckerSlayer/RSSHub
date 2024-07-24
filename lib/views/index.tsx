@@ -142,6 +142,9 @@ const Index: FC<{ debugQuery: string | undefined }> = ({ debugQuery }) => {
                 </h1>
                 <p className="text-zinc-500">If you see this page, the RSSHub is successfully installed and working.</p>
                 <p className="text-xl font-medium text-zinc-600">Everything is RSSible</p>
+                <p className="text-xl font-medium text-zinc-600">inlude ximalaya shownotes:</p>
+                <p className="text-xl font-medium text-zinc-600">/ximalaya/album/4310827/1/shownote</p>
+
                 <div className="font-bold space-x-4 text-sm">
                     <a target="_blank" href="https://docs.rsshub.app">
                         <button className="text-white bg-[#F5712C] hover:bg-[#DD4A15] py-2 px-4 rounded-full transition-colors">View Docs</button>
